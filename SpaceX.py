@@ -4,15 +4,6 @@ from googletrans import Translator
 import sqlite3 as sq
 from tkinter import ttk
 
-def sort_name():
-    with sq.connect("SpaceX.db") as con:
-        cur = con.cursor()
-        cur.execute("SELECT * FROM rockets ORDER BY name")
-        data = cur.fetchall()
-        t1.delete()
-        for row in data:
-            t1.insert("", END, values=row)
-
 
 URL = "https://api.spacexdata.com/v4/rockets"
 translator = Translator()
