@@ -4,6 +4,16 @@ from googletrans import Translator
 import sqlite3 as sq
 from tkinter import ttk
 
+def sort_name():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY name")
+        data = cur.fetchall()
+        t1.delete()
+        for row in data:
+            t1.insert("", END, values=row)
+
+
 URL = "https://api.spacexdata.com/v4/rockets"
 translator = Translator()
 res = requests.get(URL)
@@ -20,8 +30,8 @@ for rocket in rockets:
     desc = translator.translate(desc, dest='ru', src='en').text
     desc = desc.replace("(", "")
     desc = desc.replace(")", "")
-
     new_rockets.append((name, height, diameter, mass, fuel, desc, wiki))
+
 
 with sq.connect("SpaceX.db") as con:
     cur = con.cursor()
@@ -35,11 +45,17 @@ with sq.connect("SpaceX.db") as con:
     desc TEXT,
     wiki TEXT
     )""")
-    for r in new_rockets:
-        print(r)
-        cur.execute(
-            f"INSERT INTO rockets(name, height, diam, mass, fuel, desc, wiki)  VALUES('{r[0]}',{r[1]},{r[2]},{r[3]},'{r[4]}','{r[5]}','{r[6]}');")
-        con.commit()
+    cur.execute("SELECT * FROM rockets")
+    data = cur.fetchall()
+
+    if data:
+        pass
+    else:
+        for r in new_rockets:
+            print(r)
+            cur.execute(
+                f"INSERT INTO rockets(name, height, diam, mass, fuel, desc, wiki)  VALUES('{r[0]}',{r[1]},{r[2]},{r[3]},'{r[4]}','{r[5]}','{r[6]}');")
+            con.commit()
 
 
 window = Tk()
@@ -48,14 +64,20 @@ window.geometry("900x600")
 
 columns = ("#1", "#2", "#3", "#4", "#5", "#6", "#7")
 t1 = ttk.Treeview(window, show="headings", columns=columns)
-t1.heading("#1", text="1")
-t1.heading("#2", text="2")
-t1.heading("#3", text="3")
-t1.heading("#4", text="4")
-t1.heading("#5", text="5")
-t1.heading("#6", text="6")
-t1.heading("#7", text="7")
+t1.heading("#1", text="Название", command=sort_name)
+t1.heading("#2", text="Высота")
+t1.heading("#3", text="Диаметр")
+t1.heading("#4", text="Масса")
+t1.heading("#5", text="Тип топлива")
+t1.heading("#6", text="Описание")
+t1.heading("#7", text="Википедия")
 t1.pack(expand=1, fill=BOTH)
+with sq.connect("SpaceX.db") as con:
+    cur = con.cursor()
+    cur.execute("SELECT * FROM rockets")
+    data = cur.fetchall()
+    for row in data:
+        t1.insert("", END, values=row)
 
 
 window.mainloop()
