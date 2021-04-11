@@ -4,6 +4,69 @@ from googletrans import Translator
 import sqlite3 as sq
 from tkinter import ttk
 
+def sort_name1():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY name")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name2():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY height")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name3():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY diam")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name4():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY mass")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name5():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY fuel")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name6():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY desc")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
+def sort_name7():
+    with sq.connect("SpaceX.db") as con:
+        cur = con.cursor()
+        cur.execute("SELECT * FROM rockets ORDER BY wiki")
+        data = cur.fetchall()
+        for i in t1.get_children(): t1.delete(i)
+        for row in data:
+            t1.insert("", END, values=row)
+
 
 URL = "https://api.spacexdata.com/v4/rockets"
 translator = Translator()
@@ -55,13 +118,13 @@ window.geometry("900x600")
 
 columns = ("#1", "#2", "#3", "#4", "#5", "#6", "#7")
 t1 = ttk.Treeview(window, show="headings", columns=columns)
-t1.heading("#1", text="Название", command=sort_name)
-t1.heading("#2", text="Высота")
-t1.heading("#3", text="Диаметр")
-t1.heading("#4", text="Масса")
-t1.heading("#5", text="Тип топлива")
-t1.heading("#6", text="Описание")
-t1.heading("#7", text="Википедия")
+t1.heading("#1", text="Название", command=sort_name1)
+t1.heading("#2", text="Высота", command=sort_name2)
+t1.heading("#3", text="Диаметр", command=sort_name3)
+t1.heading("#4", text="Масса", command=sort_name4)
+t1.heading("#5", text="Тип топлива", command=sort_name5)
+t1.heading("#6", text="Описание", command=sort_name6)
+t1.heading("#7", text="Википедия", command=sort_name7)
 t1.pack(expand=1, fill=BOTH)
 with sq.connect("SpaceX.db") as con:
     cur = con.cursor()
